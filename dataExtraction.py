@@ -60,7 +60,7 @@ winePD = pd.DataFrame(rows, columns = list(zip(*cursor.description))[0])
 print("It worked! :)")
 
 # Now subset data by red and white wine
-red = con.execute("SELECT * FROM mainTable where wine_class = 'red' and ")
+red = con.execute("SELECT * FROM mainTable where wine_class = 'red'")
 red_rows = red.fetchall()
 
 white = con.execute("SELECT * FROM mainTable where wine_class = 'white'")
@@ -70,6 +70,31 @@ redPD = pd.DataFrame(red_rows, columns = list(zip(*red.description))[0])
 
 whitePD = pd.DataFrame(white_rows, columns = list(zip(*white.description))[0])
 
+#redNP = np.array(redPD)
+#whiteNP = np.array(whitePD)
 
+num_errors = 0
+for item in winePD:
+	num_errors += len(winePD[(winePD[item] == -999) | (winePD[item] == -1000)])
+print("We have total of: ", str(num_errors), "overall number of errors")
+
+redPD = redPD.replace([-999, -1000], np.nan)
+#redPD[redPD < 0.0] = np.nan
+redPD.fillna(redPD.mean())
+print(redPD)
+
+whitePD = whitePD.replace([-999, -1000], np.nan)
+#whitePD[whitePD < 0.0] = np.nan
+whitePD.fillna(whitePD.mean())
+
+"""
+for column in redPD:
+	replace_values(redPD)
+
+
+def replace_values(data, column):
+	data[column].replace(-999, np.mean(column), inplace = True)
+	data[column].replace(-1000, np.mean(column), inplace = True)
+"""
 
 # FIN :)
