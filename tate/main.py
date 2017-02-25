@@ -35,23 +35,13 @@ clean_frame(white_dataframe)
 normalize_frame(red_dataframe)
 # normalize_frame(white_dataframe)
 
-# red_explanatory = red_dataframe._get_numeric_data().ix[:, 0:11]
-# print(red_explanatory.columns)
-# red_response = red_dataframe._get_numeric_data().ix[12]
-# # white_numeric = white_dataframe._get_numeric_data()
-# pca = PCA(n_components=4)
-# pca.fit(red_explanatory)
-#
-#
-# fig, plot = plt.subplots()
-# fig.set_size_inches(50, 50)
-# plt.prism()
-#
-# red_transformed = pca.fit_transform(red_explanatory)
-# print(pca.explained_variance_ratio_)
-# plot.scatter(red_transformed[:, 0], red_transformed[:, 1], c = red_response)
-# plot.set_xticks(())
-# plot.set_yticks(())
-#
-# plt.tight_layout()
-# plt.show()
+red_explanatory = red_dataframe._get_numeric_data().ix[:, 0:11]
+red_response = red_dataframe._get_numeric_data().ix[12]
+# white_numeric = white_dataframe._get_numeric_data()
+
+pca = PCA(n_components=4)
+red_transformed = pca.fit_transform(red_explanatory)
+
+
+plt.scatter(red_transformed[:,0], red_transformed[:,1])
+plt.show()
