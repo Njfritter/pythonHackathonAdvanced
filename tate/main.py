@@ -2,6 +2,8 @@ import sqlite3
 import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
@@ -33,16 +35,22 @@ white_dataframe = pd.DataFrame(white_rows, columns=list(zip(*white.description))
 clean_frame(red_dataframe)
 clean_frame(white_dataframe)
 normalize_frame(red_dataframe)
-# normalize_frame(white_dataframe)
 
 red_explanatory = red_dataframe._get_numeric_data().ix[:, 0:11]
 red_response = red_dataframe._get_numeric_data().ix[:,11].astype("category")
 
-# white_numeric = white_dataframe._get_numeric_data()
+# pca = PCA(n_components=4)
+# red_transformed = pca.fit_transform(red_explanatory)
+#
+# plt.scatter(red_transformed[:,0], red_transformed[:,1], c=red_response)
+# plt.show()
 
-pca = PCA(n_components=4)
-red_transformed = pca.fit_transform(red_explanatory)
 
+train_x, test_x, train_y, test_y = train_test_split(red_explanatory, red_response, test_size=0.2)
 
-plt.scatter(red_transformed[:,0], red_transformed[:,1], c=red_response)
-plt.show()
+rf = RandomForestClassifier(n_estimators=500, max_features=3)
+rf.fit(train_x, train_y)
+
+preds = rf.predict(test_x)
+acc = np.mean(np.equal(preds, test_y).astype(float))
+print(acc)
