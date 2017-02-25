@@ -4,8 +4,8 @@ import pandas as pd
 from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
-import tensorflow as tf
+#import matplotlib.pyplot as plt
+#import tensorflow as tf
 
 def clean_frame(frame):
     numeric_frame = frame._get_numeric_data()
@@ -35,10 +35,13 @@ white_dataframe = pd.DataFrame(white_rows, columns=list(zip(*white.description))
 clean_frame(red_dataframe)
 clean_frame(white_dataframe)
 normalize_frame(red_dataframe)
+normalize_frame(white_dataframe)
 
 red_explanatory = red_dataframe._get_numeric_data().ix[:, 0:11]
-red_response = red_dataframe._get_numeric_data().ix[:,11].astype("category")
+red_response = red_dataframe._get_numeric_data().ix[:, 11].astype("category")
 
+white_explanatory = white_dataframe._get_numeric_data().ix[:, 0:11]
+white_response = white_dataframe._get_numeric_data().ix[:, 11].astype("category")
 # pca = PCA(n_components=4)
 # red_transformed = pca.fit_transform(red_explanatory)
 #
@@ -46,11 +49,22 @@ red_response = red_dataframe._get_numeric_data().ix[:,11].astype("category")
 # plt.show()
 
 
-train_x, test_x, train_y, test_y = train_test_split(red_explanatory, red_response, test_size=0.2)
+red_train_x, red_test_x, red_train_y, red_test_y = train_test_split(red_explanatory, 
+                                                                    red_response, 
+                                                                    test_size = 0.2)
+white_train_x, white_test_x, white_train_y, white_test_y = train_test_split(white_explanatory, 
+                                                                            white_response, 
+                                                                            test_size = 0.2)
 
-rf = RandomForestClassifier(n_estimators=500, max_features=3)
-rf.fit(train_x, train_y)
+def randomForest(train_x, test_x, train_y, test_y):
+    rf = RandomForestClassifier(n_estimators = 500, 
+                            max_features = 3)
+    rf.fit(train_x, train_y)
 
-preds = rf.predict(test_x)
-acc = np.mean(np.equal(preds, test_y).astype(float))
-print(acc)
+    preds = rf.predict(test_x)
+    acc = np.mean(np.equal(preds, test_y).astype(float))
+    print(acc)
+
+
+randomForest(red_train_x, red_test_x, red_train_y, red_test_y)
+randomForest(white_train_x, white_test_x, white_train_y, white_test_y)
