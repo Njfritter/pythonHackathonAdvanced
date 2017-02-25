@@ -12,9 +12,9 @@ def clean_frame(frame):
         numeric_frame[column][np.isnan(frame[column])] = numeric_frame[column].min()
 
 def normalize_frame(frame):
-    numeric_frame = frame._get_numeric_data()[0:10]
+    numeric_frame = frame._get_numeric_data()
     for index, column in enumerate(numeric_frame):
-        if index < len(numeric_frame):
+        if index < len(numeric_frame.columns.values) - 1:
             max_val = numeric_frame[column].max()
             min_val = numeric_frame[column].min()
             numeric_frame[column] = (numeric_frame[column] - min_val) / (max_val - min_val)
@@ -37,6 +37,7 @@ normalize_frame(red_dataframe)
 
 red_explanatory = red_dataframe._get_numeric_data().ix[:, 0:11]
 red_response = red_dataframe._get_numeric_data().ix[12]
+print(red_response)
 # white_numeric = white_dataframe._get_numeric_data()
 
 pca = PCA(n_components=4)
