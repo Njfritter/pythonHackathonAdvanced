@@ -36,13 +36,13 @@ normalize_frame(red_dataframe)
 # normalize_frame(white_dataframe)
 
 red_explanatory = red_dataframe._get_numeric_data().ix[:, 0:11]
-red_response = red_dataframe._get_numeric_data().ix[12]
-print(red_response)
+red_response = red_dataframe._get_numeric_data().ix[:,11].astype("category")
+
 # white_numeric = white_dataframe._get_numeric_data()
 
 pca = PCA(n_components=4)
 red_transformed = pca.fit_transform(red_explanatory)
 
 
-plt.scatter(red_transformed[:,0], red_transformed[:,1])
+plt.scatter(red_transformed[:,0], red_transformed[:,1], c=red_response)
 plt.show()
